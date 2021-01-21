@@ -15,8 +15,66 @@ body {
   align-items: center;
 }
 
+/* Modal window */
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  color: white;
+}
+
+.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Form part */
+
+.taskSet {
+  width: 50vw;
+  height: 70vh;
+  background-color: #fff;
+  padding: 10%;
+}
+
+.taskTxt {
+  width: 100%;
+  padding: 5px;
+  font-family: inherit;
+  font-size: 24px;
+  letter-spacing: 2px;
+  margin: 10px 0;
+}
+
+.taskDate {
+  width: 49%;
+  height: 20px;
+}
+
+.taskStat {
+  width: 49%;
+  height: 20px;
+}
+
+.buttons {
+  display: flex;
+  height: 50%;
+  padding: 10% 20%;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+/* Modal finished */
+
 /* Main container */
 .main {
+  display: none;
   width: 70%;
   height: 80%;
   position: relative;

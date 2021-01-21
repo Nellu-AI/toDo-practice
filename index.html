@@ -6,16 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do App</title>
 
+    <!-- Loader styles -->
+    <link rel="stylesheet" href="loader.css">
+
     <!-- my CSS -->
     <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <section class="main">
+    <div class="loader" id="loader"></div>
+
+    <section class="main" id="main">
         <!-- Add icon -->
-        <a href="#" class="add-button"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
-                width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none"
-                stroke-linecap="round" stroke-linejoin="round">
+        <a href="#" class="add-button" id="addButton"><svg xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-plus" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
@@ -59,6 +64,26 @@
         </div>
 
 
+    </section>
+
+
+    <section class="modal" id="modal">
+
+        <form class="taskSet">
+            <input class="taskTxt" type="text" placeholder="Task text">
+            <input class="taskDate" type="date">
+            <select class="taskStat" name="" id="">
+                <option value="">very important</option>
+                <option value="">basic</option>
+                <option value="">long-term</option>
+            </select>
+
+            <div class="buttons">
+                <button>Add task</button>
+                <button id="closeModBtn">Cancel</button>
+            </div>
+
+        </form>
     </section>
 
     <script src="script.js"></script>
