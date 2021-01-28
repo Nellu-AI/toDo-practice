@@ -50,25 +50,38 @@ body {
   font-family: inherit;
   font-size: 24px;
   letter-spacing: 2px;
-  margin: 10px 0;
+  margin: 15px 0;
 }
 
 .taskDate {
+  display: block;
   width: 49%;
-  height: 20px;
+  height: 30px;
+  font-size: 16px;
+  padding: 5px;
 }
 
 .taskStat {
   width: 49%;
-  height: 20px;
+  height: 30px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 15px 0;
 }
 
 .buttons {
   display: flex;
   height: 50%;
   padding: 10% 20%;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: flex-end;
+}
+
+#modal button {
+  display: inline-block;
+  width: 40%;
+  padding: 10px 20px;
+  font-size: 18px;
 }
 /* Modal finished */
 
