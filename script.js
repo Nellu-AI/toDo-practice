@@ -21,9 +21,18 @@ window.addEventListener("load", pageLoaded);
 
 button.addEventListener("click", onClickButton);
 
-closeModButton.addEventListener("click", closeModal);
+closeModButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  closeModal();
+});
 
-addTaskBtn.addEventListener("click", addNewTask);
+addTaskBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  addNewTask();
+});
+
+taskContent.addEventListener("input", switchButton);
+taskStatus.addEventListener("change", switchButton);
 
 // Functions
 function pageLoaded() {
@@ -38,20 +47,50 @@ function pageLoaded() {
 function onClickButton() {
   myModal.classList.add("show");
   taskDate.value = today;
+  taskStatus.selectedIndex = 0;
 
-  checkInputContent([taskContent, taskDate]);
+  switchButton();
+}
+
+function onButton() {
+  addTaskBtn.disabled = false;
+}
+function offButton() {
+  addTaskBtn.disabled = true;
+}
+
+function switchButton() {
+  if (checkInputContent(taskContent, taskDate, taskStatus) == false) {
+    offButton();
+  } else {
+    onButton();
+  }
+  if (taskContent.value.length >= 8) {
+    taskContent.className = "taskTxt valid";
+  } else {
+    taskContent.className = "taskTxt";
+  }
+  if (taskStatus.value !== "none") {
+    taskStatus.className = "taskStat valid";
+  } else {
+    taskStatus.className = "taskStat";
+  }
 }
 
 // close window for adding task
 function closeModal() {
-  event.preventDefault();
   myModal.classList.remove("show");
 }
 
-function checkInputContent(array) {
-  array.forEach((element) => {
-    console.log(element.value.length);
-  });
+function checkInputContent(inputText, inputDate, inputStatus) {
+  if (
+    inputText.value.length == 0 ||
+    inputStatus.value == "none" ||
+    inputText.value.length < 8
+  ) {
+    return false;
+  }
+  return true;
 }
 // Add new task for button ADD
 function addNewTask() {

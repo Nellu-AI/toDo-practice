@@ -51,6 +51,12 @@ body {
   font-size: 24px;
   letter-spacing: 2px;
   margin: 15px 0;
+  border-radius: 5px;
+  outline: none;
+}
+
+.taskTxt.valid {
+  box-shadow: 0 0 10px green;
 }
 
 .taskDate {
@@ -67,6 +73,11 @@ body {
   font-size: 16px;
   padding: 5px;
   margin: 15px 0;
+  outline: none;
+}
+
+.taskStat.valid {
+  box-shadow: 0 0 10px green;
 }
 
 .buttons {
