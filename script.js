@@ -34,6 +34,14 @@ addTaskBtn.addEventListener("click", function (e) {
 taskContent.addEventListener("input", switchButton);
 taskStatus.addEventListener("change", switchButton);
 
+tableBody.addEventListener("click", function (e) {
+  if (e.target.classList.contains("remove-icon")) {
+    e.target.parentElement.parentElement.remove();
+  } else if (e.target.classList.contains("fa-trash")) {
+    e.target.parentElement.parentElement.parentElement.remove();
+  }
+});
+
 // Functions
 function pageLoaded() {
   new Promise((resolve, reject) => {
@@ -102,7 +110,24 @@ function addNewTask() {
 
   let newTask = taskTemplate(idTask, Text, Date, Status);
 
-  tableBody.insertAdjacentHTML("beforeend", newTask);
+  new Promise((resolve, reject) => {
+    loader.style.display = "block";
+    setTimeout(() => {
+      closeModal();
+      resolve();
+    }, 1000);
+  })
+    .then(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          loader.style.display = "none";
+          resolve();
+        }, 2000);
+      });
+    })
+    .then(() => {
+      tableBody.insertAdjacentHTML("beforeend", newTask);
+    });
 }
 
 function taskTemplate(...arr) {
