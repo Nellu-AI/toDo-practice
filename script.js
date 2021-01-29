@@ -48,6 +48,7 @@ function onClickButton() {
   myModal.classList.add("show");
   taskDate.value = today;
   taskStatus.selectedIndex = 0;
+  taskContent.value = "";
 
   switchButton();
 }
