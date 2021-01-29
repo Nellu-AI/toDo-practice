@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do App</title>
 
+    <!-- Icons url -->
+    <script src="https://kit.fontawesome.com/d8cb21662f.js" crossorigin="anonymous"></script>
+
     <!-- Loader styles -->
     <link rel="stylesheet" href="loader.css">
 
@@ -36,30 +39,39 @@
                 <div>Status</div>
                 <div>Actions</div>
             </div>
+            <div class="task-body">
+                <div class="task grid-lay">
+                    <div class="task-id">1</div>
+                    <div class="task-description">to-do app</div>
+                    <div class="task-date">18.01.2021</div>
+                    <div class="task-status">in progress</div>
+                    <div class="task-actions">
+                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+                    </div>
+                </div>
 
-            <div class="task grid-lay">
-                <div class="task-id">1</div>
-                <div class="task-description">to-do app</div>
-                <div class="task-date">18.01.2021</div>
-                <div class="task-status">in progress</div>
-                <div class="task-actions">edit/remove</div>
+                <div class="task grid-lay">
+                    <div class="task-id">1</div>
+                    <div class="task-description">to-do app</div>
+                    <div class="task-date">18.01.2021</div>
+                    <div class="task-status">in progress</div>
+                    <div class="task-actions">
+                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+                    </div>
+                </div>
+                <div class="task grid-lay">
+                    <div class="task-id">1</div>
+                    <div class="task-description">to-do app</div>
+                    <div class="task-date">18.01.2021</div>
+                    <div class="task-status">in progress</div>
+                    <div class="task-actions">
+                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+                    </div>
+                </div>
             </div>
-
-            <div class="task grid-lay">
-                <div class="task-id">1</div>
-                <div class="task-description">to-do app</div>
-                <div class="task-date">18.01.2021</div>
-                <div class="task-status">in progress</div>
-                <div class="task-actions">edit/remove</div>
-            </div>
-            <div class="task grid-lay">
-                <div class="task-id">1</div>
-                <div class="task-description">to-do app</div>
-                <div class="task-date">18.01.2021</div>
-                <div class="task-status">in progress</div>
-                <div class="task-actions">edit/remove</div>
-            </div>
-
 
         </div>
 
@@ -70,16 +82,16 @@
     <section class="modal" id="modal">
 
         <form class="taskSet">
-            <input id="taskContent" class="taskTxt" type="text" placeholder="Task text">
+            <input id="taskContent" class="taskTxt" type="text" placeholder="Task text" autocomplete="off">
             <input id="taskDate" class="taskDate" type="date">
             <select class="taskStat" id="taskStatus">
-                <option value="">very important</option>
-                <option value="">basic</option>
-                <option value="">long-term</option>
+                <option value="very important">very important</option>
+                <option value="basic">basic</option>
+                <option value="long-term">long-term</option>
             </select>
 
             <div class="buttons">
-                <button>Add task</button>
+                <button id="addTaskBtn">Add task</button>
                 <button id="closeModBtn">Cancel</button>
             </div>
 
