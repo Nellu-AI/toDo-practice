@@ -5,7 +5,7 @@ const myModal = document.getElementById("modal");
 const closeModButton = document.getElementById("closeModBtn");
 const addTaskBtn = document.getElementById("addTaskBtn");
 
-let listTasksId = [];
+const listTasksId = [];
 let maxTasks = 1000;
 
 // Body part of the table
@@ -48,11 +48,42 @@ tableBody.addEventListener("click", function (e) {
     parentTask.remove();
     let idToRemove = parentTask.firstElementChild.dataset.index;
     removeIdFrom(+idToRemove);
+  } else if (e.target.classList.contains("edit-icon") || e.target.classList.contains("fa-edit")) {
+    let parentDiv;
+    if (e.target.tagName === "SPAN") {
+      parentDiv = e.target.parentElement.parentElement;
+    } else {
+      parentDiv = e.target.parentElement.parentElement.parentElement;
+    }
+    const ItemsArr = [...parentDiv.children];
+    let TaskText = ItemsArr[1].innerText;
+    let TaskDate = ItemsArr[2].innerText;
+    let TaskStat = ItemsArr[3].innerText;
+    console.log(TaskText, TaskDate, TaskStat);
+    // editTask(TaskText, TaskDate, TaskStat);
   }
 });
 
 // Functions
 
+// Edit task text and settings
+
+function editTask(text, date, status) {
+  myModal.classList.add("show");
+
+  taskDate.value = date;
+  taskContent.value = text;
+
+  if (status === "very important") {
+    taskStatus.selectedIndex = 1;
+  } else if (status === "basic") {
+    taskStatus.selectedIndex = 2;
+  } else {
+    taskStatus.selectedIndex = 3;
+  }
+
+  addTaskBtn.disabled = true; // in process
+}
 // Remove id from list
 
 function removeIdFrom(id) {
