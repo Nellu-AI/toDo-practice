@@ -5,6 +5,9 @@ const myModal = document.getElementById("modal");
 const closeModButton = document.getElementById("closeModBtn");
 const addTaskBtn = document.getElementById("addTaskBtn");
 
+let listTasksId = [];
+let maxTasks = 1000;
+
 // Body part of the table
 const tableBody = document.querySelector(".task-body");
 
@@ -36,13 +39,30 @@ taskStatus.addEventListener("change", switchButton);
 
 tableBody.addEventListener("click", function (e) {
   if (e.target.classList.contains("remove-icon")) {
-    e.target.parentElement.parentElement.remove();
+    let parentTask = e.target.parentElement.parentElement;
+    parentTask.remove();
+    let idToRemove = parentTask.firstElementChild.dataset.index;
+    removeIdFrom(+idToRemove);
   } else if (e.target.classList.contains("fa-trash")) {
-    e.target.parentElement.parentElement.parentElement.remove();
+    let parentTask = e.target.parentElement.parentElement.parentElement;
+    parentTask.remove();
+    let idToRemove = parentTask.firstElementChild.dataset.index;
+    removeIdFrom(+idToRemove);
   }
 });
 
 // Functions
+
+// Remove id from list
+
+function removeIdFrom(id) {
+  let indexToRemove = listTasksId.indexOf(id);
+  if (indexToRemove !== -1) {
+    listTasksId.splice(indexToRemove, 1);
+  }
+}
+
+// Page loading function
 function pageLoaded() {
   new Promise((resolve, reject) => {
     setTimeout(() => resolve(), 2000);
@@ -92,11 +112,7 @@ function closeModal() {
 }
 
 function checkInputContent(inputText, inputDate, inputStatus) {
-  if (
-    inputText.value.length == 0 ||
-    inputStatus.value == "none" ||
-    inputText.value.length < 8
-  ) {
+  if (inputText.value.length == 0 || inputStatus.value == "none" || inputText.value.length < 8) {
     return false;
   }
   return true;
@@ -106,10 +122,30 @@ function addNewTask() {
   let Text = taskContent.value;
   let Date = taskDate.value;
   let Status = taskStatus.value;
-  let idTask = Math.floor(Math.random() * 1000);
+  let idTask = Math.floor(Math.random() * maxTasks + 1);
 
-  let newTask = taskTemplate(idTask, Text, Date, Status);
+  idTask = checkNewTaskId(idTask);
+  // console.log(idTask);
+  if (idTask) {
+    let newTask = taskTemplate(idTask, Text, Date, Status);
 
+    addingTaskProcess(newTask);
+  }
+}
+
+function checkNewTaskId(id) {
+  if (listTasksId.indexOf(id) === -1) {
+    listTasksId.push(id);
+    return id;
+  } else if (listTasksId.length < maxTasks) {
+    let newId = Math.floor(Math.random() * maxTasks + 1);
+    return checkNewTaskId(newId);
+  } else {
+    return false;
+  }
+}
+
+function addingTaskProcess(newTask) {
   new Promise((resolve, reject) => {
     loader.style.display = "block";
     setTimeout(() => {
@@ -133,7 +169,7 @@ function addNewTask() {
 function taskTemplate(...arr) {
   return `
   <div class="task grid-lay">
-    <div class="task-id">#${arr[0]}</div>
+    <div class="task-id" data-index="${arr[0]}">#${arr[0]}</div>
     <div class="task-description">${arr[1]}</div>
     <div class="task-date">${arr[2]}</div>
     <div class="task-status">${arr[3]}</div>

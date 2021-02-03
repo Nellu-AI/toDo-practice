@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do App</title>
@@ -10,96 +9,106 @@
     <script src="https://kit.fontawesome.com/d8cb21662f.js" crossorigin="anonymous"></script>
 
     <!-- Loader styles -->
-    <link rel="stylesheet" href="loader.css">
+    <link rel="stylesheet" href="loader.css" />
 
     <!-- my CSS -->
     <link rel="stylesheet" href="style.css" />
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="loader" id="loader"></div>
 
     <section class="main" id="main">
-        <!-- Add icon -->
-        <a href="#" class="add-button" id="addButton"><svg xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-plus" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-            </svg></a>
+      <!-- Add icon -->
+      <a href="#" class="add-button" id="addButton">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-plus"
+          width="44"
+          height="44"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="#fff"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </a>
 
-        <!-- Tasks table -->
+      <!-- Tasks table -->
 
-        <div class="task-table">
-            <div class="table-head grid-lay">
-                <div>#</div>
-                <div>Task</div>
-                <div>Create Date</div>
-                <div>Status</div>
-                <div>Actions</div>
-            </div>
-            <div class="task-body">
-                <div class="task grid-lay">
-                    <div class="task-id">1</div>
-                    <div class="task-description">to-do app</div>
-                    <div class="task-date">18.01.2021</div>
-                    <div class="task-status">in progress</div>
-                    <div class="task-actions">
-                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
-                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
-                    </div>
-                </div>
-
-                <div class="task grid-lay">
-                    <div class="task-id">1</div>
-                    <div class="task-description">to-do app</div>
-                    <div class="task-date">18.01.2021</div>
-                    <div class="task-status">in progress</div>
-                    <div class="task-actions">
-                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
-                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
-                    </div>
-                </div>
-                <div class="task grid-lay">
-                    <div class="task-id">1</div>
-                    <div class="task-description">to-do app</div>
-                    <div class="task-date">18.01.2021</div>
-                    <div class="task-status">in progress</div>
-                    <div class="task-actions">
-                        <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
-                        <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
-                    </div>
-                </div>
-            </div>
-
+      <div class="task-table">
+        <div class="table-head grid-lay">
+          <div>#</div>
+          <div>Task</div>
+          <div>Create Date</div>
+          <div>Status</div>
+          <div>Actions</div>
         </div>
+        <div class="task-body">
+          <div class="task grid-lay">
+            <div class="task-id">1</div>
+            <div class="task-description">to-do app</div>
+            <div class="task-date">18.01.2021</div>
+            <div class="task-status">in progress</div>
+            <div class="task-actions">
+              <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+              <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+            </div>
+          </div>
 
-
+          <div class="task grid-lay">
+            <div class="task-id">1</div>
+            <div class="task-description">to-do app</div>
+            <div class="task-date">18.01.2021</div>
+            <div class="task-status">in progress</div>
+            <div class="task-actions">
+              <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+              <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+            </div>
+          </div>
+          <div class="task grid-lay">
+            <div class="task-id">1</div>
+            <div class="task-description">to-do app</div>
+            <div class="task-date">18.01.2021</div>
+            <div class="task-status">in progress</div>
+            <div class="task-actions">
+              <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
+              <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-
     <section class="modal" id="modal">
+      <form class="taskSet">
+        <input
+          id="taskContent"
+          class="taskTxt"
+          type="text"
+          placeholder="Task text"
+          autocomplete="off"
+        />
+        <input id="taskDate" class="taskDate" type="date" />
+        <select class="taskStat" id="taskStatus">
+          <option value="none" selected>- set - status -</option>
+          <option value="very important">very important</option>
+          <option value="basic">basic</option>
+          <option value="long-term">long-term</option>
+        </select>
 
-        <form class="taskSet">
-            <input id="taskContent" class="taskTxt" type="text" placeholder="Task text" autocomplete="off">
-            <input id="taskDate" class="taskDate" type="date">
-            <select class="taskStat" id="taskStatus">
-                <option value="none" selected> - set - status - </option>
-                <option value="very important">very important</option>
-                <option value="basic">basic</option>
-                <option value="long-term">long-term</option>
-            </select>
-
-            <div class="buttons">
-                <button id="addTaskBtn">Add task</button>
-                <button id="closeModBtn">Cancel</button>
-            </div>
-
-        </form>
+        <div class="buttons">
+          <button id="addTaskBtn">Add task</button>
+          <button id="closeModBtn">Cancel</button>
+        </div>
+      </form>
     </section>
 
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
