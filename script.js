@@ -37,6 +37,13 @@ const tasks = [
   },
 ];
 
+//Tasks objects
+
+const objOfTasks = tasks.reduce((acc, task) => {
+  acc[task.id] = task;
+  return acc;
+}, {});
+
 // Body part of the table
 const tableBody = document.querySelector(".task-body");
 
@@ -49,47 +56,26 @@ const taskStatus = document.getElementById("taskStatus");
 let today = new Date().toISOString().substr(0, 10);
 
 // Event listeners
-window.addEventListener("load", pageLoaded);
+window.addEventListener("load", pageLoaded); //loading tasks
 
-button.addEventListener("click", onClickButton);
+button.addEventListener("click", onClickButton); //show Modal
 
-closeModButton.addEventListener("click", function (e) {
-  e.preventDefault();
-  closeModal();
-});
+closeModButton.addEventListener("click", closeModal); //close Modal
 
-addTaskBtn.addEventListener("click", function (e) {
-  e.preventDefault();
-  addNewTask();
-});
-
-taskContent.addEventListener("input", switchButton);
-taskStatus.addEventListener("change", switchButton);
+taskContent.addEventListener("input", switchButton); //not active button
+taskStatus.addEventListener("change", switchButton); //not active button
 
 tableBody.addEventListener("click", function (e) {
-  if (e.target.classList.contains("remove-icon")) {
-    let parentTask = e.target.parentElement.parentElement;
-    parentTask.remove();
-    let idToRemove = parentTask.firstElementChild.dataset.index;
-    removeIdFrom(+idToRemove);
-  } else if (e.target.classList.contains("fa-trash")) {
-    let parentTask = e.target.parentElement.parentElement.parentElement;
-    parentTask.remove();
-    let idToRemove = parentTask.firstElementChild.dataset.index;
-    removeIdFrom(+idToRemove);
-  } else if (e.target.classList.contains("edit-icon") || e.target.classList.contains("fa-edit")) {
-    let parentDiv;
-    if (e.target.tagName === "SPAN") {
-      parentDiv = e.target.parentElement.parentElement;
-    } else {
-      parentDiv = e.target.parentElement.parentElement.parentElement;
-    }
-    const ItemsArr = [...parentDiv.children];
-    let TaskText = ItemsArr[1].innerText;
-    let TaskDate = ItemsArr[2].innerText;
-    let TaskStat = ItemsArr[3].innerText;
-    console.log(TaskText, TaskDate, TaskStat);
-    // editTask(TaskText, TaskDate, TaskStat);
+  if (e.target.classList.contains("fa-trash")) {
+    const parent = e.target.closest("[data-id]");
+    const id = parent.dataset.id;
+    const confirmed = deleteTask(id);
+    deleteTaskFromHtml(confirmed, parent);
+  } else if (e.target.classList.contains("fa-edit")) {
+    const parentDiv = e.target.closest("[data-id]");
+    const id = parentDiv.dataset.id;
+
+    editTask(id);
   }
 });
 
@@ -97,11 +83,6 @@ tableBody.addEventListener("click", function (e) {
 
 // Page loading function
 function pageLoaded() {
-  const objOfTasks = tasks.reduce((acc, task) => {
-    acc[task.id] = task;
-    return acc;
-  }, {});
-
   renderAllTasks(objOfTasks);
 
   new Promise((resolve, reject) => {
@@ -128,26 +109,57 @@ function renderAllTasks(tasksList) {
 
 // Edit task text and settings
 
-function editTask(text, date, status) {
+function editTask(id) {
+  const taskToEdit = objOfTasks[id];
   myModal.classList.add("show");
 
-  taskDate.value = date;
-  taskContent.value = text;
+  taskDate.value = taskToEdit.date;
+  taskContent.value = taskToEdit.body;
 
-  if (status === "very important") {
+  if (taskToEdit.status === "very important") {
     taskStatus.selectedIndex = 1;
-  } else if (status === "basic") {
+  } else if (taskToEdit.status === "basic") {
     taskStatus.selectedIndex = 2;
   } else {
     taskStatus.selectedIndex = 3;
   }
 
-  addTaskBtn.disabled = true; // in process
+  addTaskBtn.removeEventListener("click", addNewTask);
+  addTaskBtn.innerText = "Save changes";
+  switchButton();
+  addTaskBtn.addEventListener("click", editTaskButton, { once: true });
+  function editTaskButton(e) {
+    e.preventDefault();
+    let Text = taskContent.value;
+    let Status = taskStatus.value;
+    taskToEdit.body = Text;
+    taskToEdit.status = Status;
+    tableBody.innerHTML = "";
+    renderAllTasks(objOfTasks);
+    myModal.classList.remove("show");
+  }
+}
+
+//Remove task from HTML
+function deleteTaskFromHtml(confirmed, el) {
+  if (!confirmed) return;
+  el.remove();
+}
+
+// Remove task from list
+
+function deleteTask(id) {
+  const isConfirm = confirm(`Are you sure? Task with id #${id} will be removed`);
+  if (!isConfirm) return isConfirm;
+  delete objOfTasks[id];
+  removeIdFrom(id);
+  return isConfirm;
 }
 // Remove id from list
 
 function removeIdFrom(id) {
-  let indexToRemove = listTasksId.indexOf(id);
+  let indexToRemove = listTasksId.indexOf(+id.substr(5));
+  console.log(id);
   if (indexToRemove !== -1) {
     listTasksId.splice(indexToRemove, 1);
   }
@@ -160,6 +172,8 @@ function onClickButton() {
   taskContent.value = "";
 
   switchButton();
+  addTaskBtn.innerText = "Add task";
+  addTaskBtn.addEventListener("click", addNewTask);
 }
 
 function onButton() {
@@ -170,7 +184,7 @@ function offButton() {
 }
 
 function switchButton() {
-  if (checkInputContent(taskContent, taskDate, taskStatus) == false) {
+  if (checkInputContent(taskContent, taskStatus) == false) {
     offButton();
   } else {
     onButton();
@@ -188,18 +202,19 @@ function switchButton() {
 }
 
 // close window for adding task
-function closeModal() {
+function closeModal(e) {
+  e.preventDefault();
   myModal.classList.remove("show");
 }
 
-function checkInputContent(inputText, inputDate, inputStatus) {
+function checkInputContent(inputText, inputStatus) {
   if (inputText.value.length == 0 || inputStatus.value == "none" || inputText.value.length < 8) {
     return false;
   }
   return true;
 }
 // Add new task for button ADD
-function addNewTask() {
+function addNewTask(e) {
   let Text = taskContent.value;
   let Date = taskDate.value;
   let Status = taskStatus.value;
@@ -208,20 +223,33 @@ function addNewTask() {
   idTask = checkNewTaskId(idTask);
   // console.log(idTask);
   if (idTask) {
-    let newTask = taskTemplate(idTask, Text, Date, Status);
-
-    addingTaskProcess(newTask);
+    const newTask = createNewTask(idTask, Text, Date, Status);
+    console.log(newTask);
+    const newElement = taskTemplate(newTask);
+    addingTaskProcess(newElement);
   }
 }
 
+function createNewTask(id, body, date, status) {
+  const newTask = {
+    id: `task-${id}`,
+    body,
+    date,
+    status,
+  };
+  objOfTasks[newTask.id] = newTask;
+  return { ...newTask };
+}
+
 function checkNewTaskId(id) {
-  if (listTasksId.indexOf(id) === -1) {
+  if (listTasksId.indexOf(id) === -1 && listTasksId.length < maxTasks) {
     listTasksId.push(id);
     return id;
   } else if (listTasksId.length < maxTasks) {
     let newId = Math.floor(Math.random() * maxTasks + 1);
     return checkNewTaskId(newId);
   } else {
+    console.error("LIST FOR ID IS FULL");
     return false;
   }
 }
@@ -230,27 +258,21 @@ function addingTaskProcess(newTask) {
   new Promise((resolve, reject) => {
     loader.style.display = "block";
     setTimeout(() => {
-      closeModal();
+      myModal.classList.remove("show");
       resolve();
     }, 1000);
-  })
-    .then(() => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          loader.style.display = "none";
-          resolve();
-        }, 2000);
-      });
-    })
-    .then(() => {
-      tableBody.insertAdjacentHTML("beforeend", newTask);
-    });
+  }).then(() => {
+    setTimeout(() => {
+      loader.style.display = "none";
+      tableBody.insertAdjacentHTML("afterbegin", newTask);
+    }, 2000);
+  });
 }
 
 function taskTemplate({ id, body, date, status } = {}) {
   return `
-  <div class="task grid-lay">
-    <div class="task-id" data-index="${id}">#${id}</div>
+  <div class="task grid-lay" data-id="${id}">
+    <div class="task-id">#${id}</div>
     <div class="task-description">${body}</div>
     <div class="task-date">${date}</div>
     <div class="task-status">${status}</div>
