@@ -8,6 +8,35 @@ const addTaskBtn = document.getElementById("addTaskBtn");
 const listTasksId = [];
 let maxTasks = 1000;
 
+//Список задач
+
+const tasks = [
+  {
+    id: "MXGV",
+    body: "Task 1 - to do list",
+    date: "2020-02-04",
+    status: "important",
+  },
+  {
+    id: "u9n",
+    body: "Task 2 - to do list",
+    date: "2021-02-04",
+    status: "basic",
+  },
+  {
+    id: "ZRC6",
+    body: "Task 3 - to do list",
+    date: "2021-05-04",
+    status: "very important",
+  },
+  {
+    id: "Ia4",
+    body: "Task 4 - to do list",
+    date: "2021-12-04",
+    status: "long-term",
+  },
+];
+
 // Body part of the table
 const tableBody = document.querySelector(".task-body");
 
@@ -66,6 +95,37 @@ tableBody.addEventListener("click", function (e) {
 
 // Functions
 
+// Page loading function
+function pageLoaded() {
+  const objOfTasks = tasks.reduce((acc, task) => {
+    acc[task.id] = task;
+    return acc;
+  }, {});
+
+  renderAllTasks(objOfTasks);
+
+  new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 2000);
+  }).then(() => {
+    mainApp.style.display = "block";
+    loader.style.display = "none";
+  });
+}
+
+function renderAllTasks(tasksList) {
+  if (!tasksList) {
+    console.error("Передайте список задача");
+    return;
+  }
+
+  let fragment = "";
+  Object.values(tasksList).forEach((task) => {
+    let newEl = taskTemplate(task);
+    fragment += newEl;
+  });
+  tableBody.insertAdjacentHTML("beforeend", fragment);
+}
+
 // Edit task text and settings
 
 function editTask(text, date, status) {
@@ -91,16 +151,6 @@ function removeIdFrom(id) {
   if (indexToRemove !== -1) {
     listTasksId.splice(indexToRemove, 1);
   }
-}
-
-// Page loading function
-function pageLoaded() {
-  new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), 2000);
-  }).then(() => {
-    mainApp.style.display = "block";
-    loader.style.display = "none";
-  });
 }
 
 function onClickButton() {
@@ -197,13 +247,13 @@ function addingTaskProcess(newTask) {
     });
 }
 
-function taskTemplate(...arr) {
+function taskTemplate({ id, body, date, status } = {}) {
   return `
   <div class="task grid-lay">
-    <div class="task-id" data-index="${arr[0]}">#${arr[0]}</div>
-    <div class="task-description">${arr[1]}</div>
-    <div class="task-date">${arr[2]}</div>
-    <div class="task-status">${arr[3]}</div>
+    <div class="task-id" data-index="${id}">#${id}</div>
+    <div class="task-description">${body}</div>
+    <div class="task-date">${date}</div>
+    <div class="task-status">${status}</div>
     <div class="task-actions">
       <span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span>
       <span class="remove-icon"><i class="fas fa-trash fa-2x"></i></span>
