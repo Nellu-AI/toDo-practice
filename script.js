@@ -215,6 +215,7 @@ function checkInputContent(inputText, inputStatus) {
 }
 // Add new task for button ADD
 function addNewTask(e) {
+  e.preventDefault();
   let Text = taskContent.value;
   let Date = taskDate.value;
   let Status = taskStatus.value;
