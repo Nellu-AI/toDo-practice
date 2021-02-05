@@ -148,6 +148,12 @@ body {
   text-transform: uppercase;
   color: #fff;
   text-shadow: 0px 0px 5px rgb(231, 203, 203);
+  padding: 15px 0;
+}
+.table-head > div:hover {
+  color: rgb(218, 162, 23);
+  cursor: pointer;
+  background-color: #303b74;
 }
 /* Table heading finished */
 
