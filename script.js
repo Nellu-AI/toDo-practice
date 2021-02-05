@@ -127,16 +127,36 @@ function editTask(id, parent) {
     let Status = taskStatus.value;
     taskToEdit.body = Text;
     taskToEdit.status = Status;
-    parent.querySelector(".task-description").innerHTML = Text;
-    parent.querySelector(".task-status").innerHTML = Status;
-    myModal.classList.remove("show");
+    new Promise((resolve, reject) => {
+      loader.style.display = "block";
+      setTimeout(() => {
+        myModal.classList.remove("show");
+        resolve();
+      }, 1000);
+    }).then(() => {
+      setTimeout(() => {
+        loader.style.display = "none";
+        parent.querySelector(".task-description .task-text").innerText = Text;
+        parent.querySelector(".task-status").innerHTML = Status;
+      }, 2000);
+    });
   }
 }
 
 //Remove task from HTML
 function deleteTaskFromHtml(confirmed, el) {
   if (!confirmed) return;
-  el.remove();
+  new Promise((resolve, reject) => {
+    loader.style.display = "block";
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  }).then(() => {
+    setTimeout(() => {
+      loader.style.display = "none";
+      el.remove();
+    }, 1000);
+  });
 }
 
 // Remove task from list
@@ -268,7 +288,7 @@ function taskTemplate({ id, body, date, status } = {}) {
   return `
   <div class="task grid-lay" data-id="${id}">
     <div class="task-id">#${id}</div>
-    <div class="task-description">${body}</div>
+    <div class="task-description"><span class="task-text">${body}</span><span class="edit-icon"><i class="fas fa-edit fa-2x"></i></span></div>
     <div class="task-date">${date}</div>
     <div class="task-status">${status}</div>
     <div class="task-actions">
