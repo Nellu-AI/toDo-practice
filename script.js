@@ -37,6 +37,64 @@ const tasks = [
   },
 ];
 
+let clickedTasks = 0,
+  clickedId = 0,
+  clickedDate = 0,
+  clickedStat = 0;
+
+//Heading part
+const tableHead = document.getElementById("tableHead");
+tableHead.addEventListener("click", function (e) {
+  let elem = e.target;
+  if (elem.classList.contains("_task")) {
+    sortTable(1, clickedTasks);
+    if (clickedTasks % 3 == 0) {
+      tableBody.innerHTML = "";
+      renderAllTasks(tasks);
+      clickedTasks = 0;
+    }
+    clickedId = 0;
+    clickedDate = 0;
+    clickedStat = 0;
+    console.log(clickedTasks);
+  } else if (elem.classList.contains("_id")) {
+    sortTable(0, clickedId);
+    if (clickedId % 3 == 0) {
+      tableBody.innerHTML = "";
+      renderAllTasks(tasks);
+      clickedId = 0;
+    }
+    clickedTasks = 0;
+    clickedDate = 0;
+    clickedStat = 0;
+    console.log(clickedId);
+  } else if (elem.classList.contains("_date")) {
+    sortTable(2, clickedDate);
+    if (clickedDate % 3 == 0) {
+      tableBody.innerHTML = "";
+      renderAllTasks(tasks);
+
+      clickedDate = 0;
+    }
+    clickedTasks = 0;
+    clickedId = 0;
+    clickedStat = 0;
+    console.log(clickedDate);
+  } else if (elem.classList.contains("_status")) {
+    sortTable(3, clickedStat);
+    if (clickedStat % 3 == 0) {
+      tableBody.innerHTML = "";
+      renderAllTasks(tasks);
+
+      clickedStat = 0;
+    }
+    clickedTasks = 0;
+    clickedId = 0;
+    clickedDate = 0;
+    console.log(clickedStat);
+  }
+});
+
 // Body part of the table
 const tableBody = document.querySelector(".task-body");
 
@@ -252,7 +310,7 @@ function createNewTask(id, body, date, status) {
     date,
     status,
   };
-  tasks.push(newTask);
+  tasks.unshift(newTask);
   return { ...newTask };
 }
 
@@ -297,4 +355,63 @@ function taskTemplate({ id, body, date, status } = {}) {
     </div>
   </div>
   `;
+}
+
+// Sort function n - column number
+function sortTable(n, numClicked) {
+  let rows,
+    x,
+    y,
+    shouldSwitch,
+    i,
+    switchCount = 0;
+  // n = 0 - id
+  // n = 1 - descript
+  let switching = true;
+  let dir = "asc"; //ascending order
+  while (switching) {
+    switching = false; //no switching is done
+    rows = tableBody.getElementsByClassName("task");
+    for (i = 0; i < rows.length - 1; i++) {
+      shouldSwitch = false;
+      x = rows[i].children[n];
+      y = rows[i + 1].children[n];
+      if (dir == "asc") {
+        if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchCount++;
+    } else {
+      if (switchCount == 0 && dir == "asc" && numClicked == 1) {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+  switch (n) {
+    case 0:
+      clickedId++;
+      break;
+    case 1:
+      clickedTasks++;
+      break;
+    case 2:
+      clickedDate++;
+      break;
+    case 3:
+      clickedStat++;
+      break;
+  }
+  console.log(dir);
 }
