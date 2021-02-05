@@ -37,13 +37,6 @@ const tasks = [
   },
 ];
 
-//Tasks objects
-
-const objOfTasks = tasks.reduce((acc, task) => {
-  acc[task.id] = task;
-  return acc;
-}, {});
-
 // Body part of the table
 const tableBody = document.querySelector(".task-body");
 
@@ -75,7 +68,7 @@ tableBody.addEventListener("click", function (e) {
     const parentDiv = e.target.closest("[data-id]");
     const id = parentDiv.dataset.id;
 
-    editTask(id);
+    editTask(id, parentDiv);
   }
 });
 
@@ -83,7 +76,7 @@ tableBody.addEventListener("click", function (e) {
 
 // Page loading function
 function pageLoaded() {
-  renderAllTasks(objOfTasks);
+  renderAllTasks(tasks);
 
   new Promise((resolve, reject) => {
     setTimeout(() => resolve(), 2000);
@@ -100,7 +93,7 @@ function renderAllTasks(tasksList) {
   }
 
   let fragment = "";
-  Object.values(tasksList).forEach((task) => {
+  tasksList.forEach((task) => {
     let newEl = taskTemplate(task);
     fragment += newEl;
   });
@@ -109,8 +102,8 @@ function renderAllTasks(tasksList) {
 
 // Edit task text and settings
 
-function editTask(id) {
-  const taskToEdit = objOfTasks[id];
+function editTask(id, parent) {
+  const taskToEdit = tasks.find((element) => element.id === id);
   myModal.classList.add("show");
 
   taskDate.value = taskToEdit.date;
@@ -134,8 +127,8 @@ function editTask(id) {
     let Status = taskStatus.value;
     taskToEdit.body = Text;
     taskToEdit.status = Status;
-    tableBody.innerHTML = "";
-    renderAllTasks(objOfTasks);
+    parent.querySelector(".task-description").innerHTML = Text;
+    parent.querySelector(".task-status").innerHTML = Status;
     myModal.classList.remove("show");
   }
 }
@@ -151,7 +144,9 @@ function deleteTaskFromHtml(confirmed, el) {
 function deleteTask(id) {
   const isConfirm = confirm(`Are you sure? Task with id #${id} will be removed`);
   if (!isConfirm) return isConfirm;
-  delete objOfTasks[id];
+  const taskToRemove = tasks.find((element) => element.id === id);
+  const taskIndex = tasks.indexOf(taskToRemove);
+  if (taskIndex > -1) tasks.splice(taskIndex, 1);
   removeIdFrom(id);
   return isConfirm;
 }
@@ -159,7 +154,6 @@ function deleteTask(id) {
 
 function removeIdFrom(id) {
   let indexToRemove = listTasksId.indexOf(+id.substr(5));
-  console.log(id);
   if (indexToRemove !== -1) {
     listTasksId.splice(indexToRemove, 1);
   }
@@ -238,7 +232,7 @@ function createNewTask(id, body, date, status) {
     date,
     status,
   };
-  objOfTasks[newTask.id] = newTask;
+  tasks.push(newTask);
   return { ...newTask };
 }
 
