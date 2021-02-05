@@ -10,7 +10,7 @@ let maxTasks = 1000;
 
 //Список задач
 
-const tasks = [
+const tasks = updateTaskList() || [
   {
     id: "MXGV",
     body: "Task 1 - to do list",
@@ -225,6 +225,8 @@ function deleteTask(id) {
   const taskToRemove = tasks.find((element) => element.id === id);
   const taskIndex = tasks.indexOf(taskToRemove);
   if (taskIndex > -1) tasks.splice(taskIndex, 1);
+  updateLocalStorage();
+
   removeIdFrom(id);
   return isConfirm;
 }
@@ -297,6 +299,7 @@ function addNewTask(e) {
   // console.log(idTask);
   if (idTask) {
     const newTask = createNewTask(idTask, Text, Date, Status);
+    updateLocalStorage();
     console.log(newTask);
     const newElement = taskTemplate(newTask);
     addingTaskProcess(newElement);
@@ -414,4 +417,13 @@ function sortTable(n, numClicked) {
       break;
   }
   console.log(dir);
+}
+
+function updateLocalStorage() {
+  localStorage.setItem("taskList", JSON.stringify(tasks));
+}
+
+function updateTaskList() {
+  const tasks = JSON.parse(localStorage.getItem("taskList"));
+  return tasks;
 }
